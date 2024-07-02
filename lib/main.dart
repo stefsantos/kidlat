@@ -58,38 +58,56 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Map',
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(254, 182, 44, 1),
+            borderRadius: BorderRadius.circular(30.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.note),
-            label: 'Activity',
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(200.0),
+            child: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.map),
+                  label: 'Map',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.note),
+                  label: 'Activity',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.local_activity),
+                  label: 'Kidlat',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.star),
+                  label: 'Favorites',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.black,
+              backgroundColor: const Color.fromRGBO(254, 182, 44, 1),
+              selectedIconTheme: const IconThemeData(color: Colors.white),
+              onTap: _onItemTapped,
+              type: BottomNavigationBarType.fixed,
+              selectedLabelStyle: const TextStyle(color: Colors.white),
+              unselectedLabelStyle: const TextStyle(color: Colors.black),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_activity),
-            label: 'Kidlat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Favorites',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.white,
-        backgroundColor: const Color.fromRGBO(254, 182, 44, 1),
-        selectedIconTheme: const IconThemeData(color: Colors.black),
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: const TextStyle(color: Colors.white),
-        unselectedLabelStyle: const TextStyle(color: Colors.black),
+        ),
       ),
     );
   }
@@ -108,7 +126,7 @@ class MapSampleState extends State<MapSample> {
   final Location _locationService = Location();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
+    target: LatLng(14.558231435712608, 121.0173471405225),
     zoom: 14.4746,
   );
 
@@ -136,52 +154,54 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          GoogleMap(
-            mapType: MapType.normal,  // Set the map to 2D mode
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-              if (_currentLocation != null) {
-                controller.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    target: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
-                    zoom: 14.4746,
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            GoogleMap(
+              mapType: MapType.normal,  // Set the map to 2D mode
+              initialCameraPosition: _kGooglePlex,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+                if (_currentLocation != null) {
+                  controller.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
+                      zoom: 14.4746,
+                    ),
+                  ));
+                }
+              },
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+            ),
+            Positioned(
+              top: 20, // Adjust this value for more padding if necessary
+              left: 10,
+              right: 10,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    prefixIcon: Icon(Icons.search),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   ),
-                ));
-              }
-            },
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-          ),
-          Positioned(
-            top: 40,
-            left: 10,
-            right: 10,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30.0),
-                boxShadow: const[
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  prefixIcon: Icon(Icons.search),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
