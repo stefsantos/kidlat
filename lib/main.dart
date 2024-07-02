@@ -35,6 +35,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes the back button
         title: const Text('Login or Sign In'),
       ),
       body: Center(
@@ -70,6 +71,7 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes the back button
         title: const Text('Sign In'),
       ),
       body: Center(
@@ -199,6 +201,7 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes the back button
         title: const Text('Profile Page'),
       ),
       body: Center(
