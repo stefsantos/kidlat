@@ -23,7 +23,86 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login or Sign In'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SignInPage()),
+                );
+              },
+              child: const Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the sign-in page if needed
+              },
+              child: const Text('Sign In'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SignInPage extends StatelessWidget {
+  const SignInPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sign In'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const TextField(
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                ),
+              ),
+              const TextField(
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                ),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyHomePage()),
+                  );
+                },
+                child: const Text('Login'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -43,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Text('Activity Page'),
     Text('Option 3'),
     Text('Favorites Page'),
-    Text('Profile Page'),
+    ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -62,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           decoration: BoxDecoration(
             color: const Color.fromRGBO(254, 182, 44, 1),
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: BorderRadius.circular(1.0),
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
@@ -107,6 +186,40 @@ class _MyHomePageState extends State<MyHomePage> {
               unselectedLabelStyle: const TextStyle(color: Colors.black),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile Page'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('Profile Information'),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                child: const Text('Logout'),
+              ),
+            ),
+          ],
         ),
       ),
     );
