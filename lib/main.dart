@@ -240,15 +240,39 @@ class MapSampleState extends State<MapSample> {
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
   LocationData? _currentLocation;
   final Location _locationService = Location();
+  Set<Marker> _markers = {};
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(14.558231435712608, 121.0173471405225),
     zoom: 14.4746,
   );
 
+  void _addMarker(LatLng position, String markerId, String title, String snippet) 
+  {
+    Marker marker = Marker(
+      markerId: MarkerId(markerId),
+      position: position,
+      infoWindow: InfoWindow(
+        title: title,
+        snippet: snippet,
+      ),
+    );
+
+    setState(() {
+      _markers.add(marker);
+    });  
+  }
+
+  void _addAdditionalMarkers() {
+    _addMarker(LatLng(14.554729, 121.024445), 'marker2', 'Marker 2', 'Second marker');
+    _addMarker(LatLng(14.561212, 121.015305), 'marker3', 'Marker 3', 'Third marker');
+    _addMarker(LatLng(14.557745, 121.018705), 'marker4', 'Marker 4', 'Fourth marker');
+  }
+
   @override
   void initState() {
     super.initState();
+    _addAdditionalMarkers();
     _getCurrentLocation();
   }
 
@@ -265,6 +289,31 @@ class MapSampleState extends State<MapSample> {
         zoom: 14.4746,
       ),
     ));
+  }
+
+  Future<void> _centerMapOnMarker(String title) async 
+  {
+    final GoogleMapController controller = await _controller.future;
+    Marker? marker;
+
+    try {
+      marker = _markers.firstWhere((m) => m.infoWindow.title == title);
+    } catch (e) {
+      marker = null;
+    }
+
+    if (marker != null) {
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: marker.position,
+            zoom: 14.4746,
+          ),
+        ),
+      );
+    } else {
+      print("Marker named $title not found");
+    }
   }
 
   @override
@@ -289,6 +338,7 @@ class MapSampleState extends State<MapSample> {
               },
               myLocationEnabled: true,
               myLocationButtonEnabled: true,
+              markers: _markers,
             ),
             Positioned(
               top: 20, // Adjust this value for more padding if necessary
@@ -306,13 +356,16 @@ class MapSampleState extends State<MapSample> {
                     ),
                   ],
                 ),
-                child: const TextField(
+                child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: Icon(Icons.search),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   ),
+                  onSubmitted: (value) {
+                    _centerMapOnMarker(value);
+                  },
                 ),
               ),
             ),
