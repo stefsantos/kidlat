@@ -241,14 +241,17 @@ class MapSampleState extends State<MapSample> {
   LocationData? _currentLocation;
   final Location _locationService = Location();
   Set<Marker> _markers = {};
+  List<String> _suggestions = [];
+  TextEditingController _searchController = TextEditingController();
+  OverlayEntry? _overlayEntry;
+  final FocusNode _focusNode = FocusNode();
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(14.558231435712608, 121.0173471405225),
     zoom: 14.4746,
   );
 
-  void _addMarker(LatLng position, String markerId, String title, String snippet) 
-  {
+  void _addMarker(LatLng position, String markerId, String title, String snippet) {
     Marker marker = Marker(
       markerId: MarkerId(markerId),
       position: position,
@@ -260,7 +263,8 @@ class MapSampleState extends State<MapSample> {
 
     setState(() {
       _markers.add(marker);
-    });  
+      _updateSuggestions();
+    });
   }
 
   void _addAdditionalMarkers() {
@@ -269,11 +273,32 @@ class MapSampleState extends State<MapSample> {
     _addMarker(LatLng(14.557745, 121.018705), 'marker4', 'Marker 4', 'Fourth marker');
   }
 
+  void _updateSuggestions() {
+    setState(() {
+      _suggestions = _markers.map((marker) => marker.infoWindow.title ?? '').toList();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _addAdditionalMarkers();
     _getCurrentLocation();
+    _searchController.addListener(() {
+      _updateOverlay();
+    });
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        _removeOverlay();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    _focusNode.dispose();
+    super.dispose();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -291,13 +316,12 @@ class MapSampleState extends State<MapSample> {
     ));
   }
 
-  Future<void> _centerMapOnMarker(String title) async 
-  {
+  Future<void> _centerMapOnMarker(String title) async {
     final GoogleMapController controller = await _controller.future;
     Marker? marker;
 
     try {
-      marker = _markers.firstWhere((m) => m.infoWindow.title == title);
+      marker = _markers.firstWhere((m) => m.infoWindow.title!.toLowerCase() == title.toLowerCase());
     } catch (e) {
       marker = null;
     }
@@ -316,6 +340,61 @@ class MapSampleState extends State<MapSample> {
     }
   }
 
+  void _updateOverlay() {
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+    }
+    final filteredSuggestions = _suggestions
+        .where((suggestion) =>
+            suggestion.toLowerCase().contains(_searchController.text.toLowerCase()))
+        .toList();
+    if (_searchController.text.isNotEmpty && filteredSuggestions.isNotEmpty) {
+      _overlayEntry = _createOverlayEntry(filteredSuggestions);
+      Overlay.of(context).insert(_overlayEntry!);
+    } else {
+      _overlayEntry = null;
+    }
+  }
+
+  void _removeOverlay() {
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+      _overlayEntry = null;
+    }
+  }
+
+  OverlayEntry _createOverlayEntry(List<String> suggestions) {
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
+    var size = renderBox.size;
+    var offset = renderBox.localToGlobal(Offset.zero);
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        width: size.width - 25,
+        left: offset.dx + 10,
+        top: offset.dy + 125,
+        child: Material(
+          elevation: 4.0,
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemCount: suggestions.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(suggestions[index]),
+                onTap: () {
+                  _centerMapOnMarker(suggestions[index]);
+                  _searchController.text = suggestions[index];
+                  FocusScope.of(context).unfocus(); // Close the keyboard
+                  _removeOverlay(); // Remove the overlay after selection
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -323,7 +402,7 @@ class MapSampleState extends State<MapSample> {
         child: Stack(
           children: <Widget>[
             GoogleMap(
-              mapType: MapType.normal,  // Set the map to 2D mode
+              mapType: MapType.normal, // Set the map to 2D mode
               initialCameraPosition: _kGooglePlex,
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
@@ -357,6 +436,8 @@ class MapSampleState extends State<MapSample> {
                   ],
                 ),
                 child: TextField(
+                  controller: _searchController,
+                  focusNode: _focusNode,
                   decoration: InputDecoration(
                     hintText: 'Search...',
                     prefixIcon: Icon(Icons.search),
