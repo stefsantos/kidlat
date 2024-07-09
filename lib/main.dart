@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'dart:async';
+import 'SignUp.dart';
 
 void main() {
   runApp(const MyApp());
@@ -53,9 +54,13 @@ class LoginPage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Navigate to the sign-in page if needed
+                // Navigate to the sign-up page if needed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignUpPage()),
+                );
               },
-              child: const Text('Sign In'),
+              child: const Text('Create Account'),
             ),
           ],
         ),
@@ -63,7 +68,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
