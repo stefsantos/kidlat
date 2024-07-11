@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 import 'SignUp3.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:flutter/widgets.dart';
 class SignUpPage2 extends StatefulWidget {
   @override
   _SignUpPage2State createState() => _SignUpPage2State();
@@ -12,6 +12,10 @@ class SignUpPage2 extends StatefulWidget {
 
 class _SignUpPage2State extends State<SignUpPage2> {
   bool isChecked = false;
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  String? selectedGender;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +71,11 @@ class _SignUpPage2State extends State<SignUpPage2> {
                 ],
               ),
               SizedBox(height: 20),
-              _buildInputField('Mobile Number', '+63 | Phone Number'),
+              _buildInputField('Mobile Number', '+63 | Phone Number', mobileController),
               SizedBox(height: 20),
-              _buildInputField('Password', 'Enter your password'),
+              _buildInputField('Password', 'Enter your password', passwordController, obscureText: true),
               SizedBox(height: 20),
-              _buildInputField('Confirm Password', 'Re-enter your password'),
+              _buildInputField('Confirm Password', 'Re-enter your password', confirmPasswordController, obscureText: true),
               SizedBox(height: 20),
               Text(
                 'Gender',
@@ -99,7 +103,14 @@ class _SignUpPage2State extends State<SignUpPage2> {
                 ),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: GenderDropdown(),
+                  child: GenderDropdown(
+                    selectedGender: selectedGender,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedGender = newValue;
+                      });
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -147,7 +158,7 @@ class _SignUpPage2State extends State<SignUpPage2> {
                   width: 350,
                   height: 48.43,
                   decoration: ShapeDecoration(
-                    color: Colors.white,
+                    color: Color.fromRGBO(254, 182, 44, 1.0),
                     shape: RoundedRectangleBorder(
                       side: BorderSide(
                         width: 0.50,
@@ -163,45 +174,32 @@ class _SignUpPage2State extends State<SignUpPage2> {
                       ),
                     ],
                   ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        // Add your onTap functionality here
-                        print("Create Account Button tapped!");
+                  child: TextButton(
+                    onPressed: () {
+                      print("Create Account Button tapped!");
 
-                        if (isChecked)
-                        {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignUpPage3()),
-                          );
-                        }
-
-                        else
-                        {
-                          Fluttertoast.showToast(msg: "You must agree to the terms to proceed.",
+                      if (isChecked && _validateFields()) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignUpPage3()),
+                        );
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "All fields must be filled and terms must be agreed to proceed.",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.red,
                           textColor: Colors.white,
-                          fontSize: 16.0);
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(30),
-                      splashColor: Color.fromRGBO(254, 182, 44, 1.0),
-                      child: Center(
-                        child: Text(
-                          'Create Account',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontFamily: 'SF Pro Text',
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.30,
-                          ),
-                        ),
+                          fontSize: 16.0,
+                        );
+                      }
+                    },
+                    child: Text(
+                      'Create Account',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -215,7 +213,7 @@ class _SignUpPage2State extends State<SignUpPage2> {
     );
   }
 
-  Widget _buildInputField(String label, String hintText) {
+  Widget _buildInputField(String label, String hintText, TextEditingController controller, {bool obscureText = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -231,6 +229,8 @@ class _SignUpPage2State extends State<SignUpPage2> {
         ),
         SizedBox(height: 8),
         TextField(
+          controller: controller,
+          obscureText: obscureText,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
@@ -253,38 +253,36 @@ class _SignUpPage2State extends State<SignUpPage2> {
       ],
     );
   }
+
+  bool _validateFields() {
+    return mobileController.text.isNotEmpty &&
+           passwordController.text.isNotEmpty &&
+           confirmPasswordController.text.isNotEmpty &&
+           selectedGender != null;
+  }
 }
 
-class GenderDropdown extends StatefulWidget {
-  @override
-  _GenderDropdownState createState() => _GenderDropdownState();
-}
+class GenderDropdown extends StatelessWidget {
+  final String? selectedGender;
+  final ValueChanged<String?>? onChanged;
 
-class _GenderDropdownState extends State<GenderDropdown> {
-  String? selectedGender;
+  GenderDropdown({this.selectedGender, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 400,
-      child: DropdownButton<String>(
-        value: selectedGender,
-        hint: Text('Select your gender'),
-        isExpanded: true,
-        underline: SizedBox(),
-        borderRadius: BorderRadius.circular(12),
-        items: <String>['Male', 'Female'].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (String? newValue) {
-          setState(() {
-            selectedGender = newValue;
-          });
-        },
-      ),
+    return DropdownButton<String>(
+      value: selectedGender,
+      hint: Text('Select your gender'),
+      isExpanded: true,
+      underline: SizedBox(),
+      borderRadius: BorderRadius.circular(12),
+      items: <String>['Male', 'Female'].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: onChanged,
     );
   }
 }

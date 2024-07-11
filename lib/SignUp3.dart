@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
 
 class SignUpPage3 extends StatelessWidget {
   @override
@@ -64,26 +65,31 @@ class SignUpPage3 extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
-                    width: 355.06,
-                    height: 52.54,
-                    decoration: ShapeDecoration(
-                      color: Color(0xFFFEB62C),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                  TextButton(
+                    onPressed: () {
+                        print("Proceed to Login Button tapped!");
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: Text('Proceed to Login',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    child: Center(
-                      child: Text(
-                        'Proceed to Login',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.50,
-                        ),
+                    ),
+                    style: TextButton.styleFrom(
+                      elevation: 2,
+                      backgroundColor: Colors.amber,
+                      minimumSize: Size(350, 48.43),
+                      shadowColor: Colors.black.withOpacity(0.2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        side: BorderSide(
+                          color: Colors.grey.shade600.withOpacity(0.2),
+                          width: 1.5,
+                        )
                       ),
                     ),
                   ),

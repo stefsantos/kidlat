@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'SignUp2.dart';
+
 class SignUpPage extends StatelessWidget {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,101 +61,11 @@ class SignUpPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              Text(
-                'Username',
-                style: TextStyle(
-                  color: Color(0xFF2A2A2A),
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.50,
-                ),
-              ),
-              SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter your username',
-                  hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.7),
-                    fontSize: 17,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: -0.30,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color(0xFFE1E1E1),
-                      width: 2,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-                ),
-              ),
+              _buildInputField('Username', 'Enter your username', usernameController),
               SizedBox(height: 20),
-              Text(
-                'Email',
-                style: TextStyle(
-                  color: Color(0xFF2A2A2A),
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.50,
-                ),
-              ),
-              SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter your email',
-                  hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.7),
-                    fontSize: 17,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: -0.30,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color(0xFFE1E1E1),
-                      width: 2,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-                ),
-              ),
+              _buildInputField('Email', 'Enter your email', emailController),
               SizedBox(height: 20),
-              Text(
-                'Name',
-                style: TextStyle(
-                  color: Color(0xFF2A2A2A),
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.50,
-                ),
-              ),
-              SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Enter your name',
-                  hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.7),
-                    fontSize: 17,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: -0.30,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Color(0xFFE1E1E1),
-                      width: 2,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-                ),
-              ),
+              _buildInputField('Name', 'Enter your name', nameController),
               SizedBox(height: 20),
               Align(
                 alignment: Alignment.bottomRight,
@@ -177,12 +93,21 @@ class SignUpPage extends StatelessWidget {
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: () {
-                        // Add your onTap functionality here
-                        print("Button tapped!");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignUpPage2())
-                        );
+                        if (_validateFields()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignUpPage2()),
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "All fields must be filled to proceed.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+                        }
                       },
                       borderRadius: BorderRadius.circular(30),
                       splashColor: Color.fromRGBO(254, 182, 44, 1.0),
@@ -209,5 +134,51 @@ class SignUpPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildInputField(String label, String hintText, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: Color(0xFF2A2A2A),
+            fontSize: 20,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.50,
+          ),
+        ),
+        SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: Colors.black.withOpacity(0.7),
+              fontSize: 17,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              letterSpacing: -0.30,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: Color(0xFFE1E1E1),
+                width: 2,
+              ),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+          ),
+        ),
+      ],
+    );
+  }
+
+  bool _validateFields() {
+    return usernameController.text.isNotEmpty &&
+           emailController.text.isNotEmpty &&
+           nameController.text.isNotEmpty;
   }
 }
