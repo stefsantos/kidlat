@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+import 'package:vector_graphics/vector_graphics.dart';
 
-class SignUpPage2 extends StatelessWidget {
+class SignUpPage2 extends StatefulWidget {
+  @override
+  _SignUpPage2State createState() => _SignUpPage2State();
+}
+
+class _SignUpPage2State extends State<SignUpPage2> {
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,11 +101,49 @@ class SignUpPage2 extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Align(
-                alignment: Alignment.bottomRight,
+              Center(
                 child: Container(
-                  width: 117,
-                  height: 42,
+                  width: 350,
+                  height: 24,
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                          value: isChecked,
+                          activeColor: Color.fromRGBO(254, 182, 44, 1.0),
+                          onChanged: (bool? newValue) {
+                            setState(() {
+                              isChecked = newValue!;
+                              print(isChecked);
+                            });
+                          },
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Agree to the terms of use and privacy policy',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontFamily: 'SF Pro Text',
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.30,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  width: 350,
+                  height: 48.43,
                   decoration: ShapeDecoration(
                     color: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -118,13 +166,13 @@ class SignUpPage2 extends StatelessWidget {
                     child: InkWell(
                       onTap: () {
                         // Add your onTap functionality here
-                        print("Sign Up 2 Button tapped!");
+                        print("Create Account Button tapped!");
                       },
                       borderRadius: BorderRadius.circular(30),
                       splashColor: Color.fromRGBO(254, 182, 44, 1.0),
                       child: Center(
                         child: Text(
-                          'Next',
+                          'Create Account',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black,
@@ -194,17 +242,18 @@ class GenderDropdown extends StatefulWidget {
 
 class _GenderDropdownState extends State<GenderDropdown> {
   String? selectedGender;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 400, 
+      width: 400,
       child: DropdownButton<String>(
         value: selectedGender,
         hint: Text('Select your gender'),
         isExpanded: true,
         underline: SizedBox(),
         borderRadius: BorderRadius.circular(12),
-        items: <String>['M', 'F'].map((String value) {
+        items: <String>['Male', 'Female'].map((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),
