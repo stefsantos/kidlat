@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'SignUp.dart';
-
+import 'SignUp2.dart';
 void main() {
   runApp(const MyApp());
 }
