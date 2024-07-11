@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'dart:async';
@@ -184,41 +185,150 @@ class LoginPage extends StatelessWidget {
   }
 }
 class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
-
   @override
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true, // Removes the back button
-        title: const Text('Sign In'),
+        automaticallyImplyLeading: true, 
+        title: const Text('Login'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'Username',
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  width: 73,
+                  height: 61,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage("https://via.placeholder.com/73x61"),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
               ),
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
-                obscureText: true,
+              SizedBox(height:20),
+              Container(
+                width: double.infinity,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 40,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -0.30,
+                    ),
+                  )
+                )
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
+              SizedBox(height: 20),
+              _buildInputField('Email Address', emailController),
+              SizedBox(height: 10),
+              _buildInputField('Password', passwordController, obscureText: true),
+              SizedBox(height: 30),
+              TextButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MyHomePage()),
+                    print("Proceed to Login Button tapped!");
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyHomePage()),
                   );
                 },
-                child: const Text('Login'),
+                child: Text('Login',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                ),
+                style: TextButton.styleFrom(
+                  elevation: 2,
+                  backgroundColor: Colors.white,
+                  minimumSize: Size(350, 48.43),
+                  shadowColor: Colors.black.withOpacity(0.2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: BorderSide(
+                      color: Colors.grey.shade600.withOpacity(0.2),
+                      width: 2,
+                    )
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              Container(
+                width: 318,
+                height: 1.15,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                ),
+              ),
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 198,
+                    height: 21,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Don’t have an account? ',
+                            style: TextStyle(
+                              color: Colors.black.withOpacity(0.7),
+                              fontSize: 11,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              height: 0.15,
+                              letterSpacing: -0.08,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Signup',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 11,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w700,
+                              height: 0.15,
+                              letterSpacing: -0.08,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    width: 118,
+                    height: 21,
+                    child: Text(
+                      'Forgot password?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color(0xFFFEB62C),
+                        fontSize: 11,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                        height: 0.15,
+                        letterSpacing: -0.08,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -347,6 +457,37 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
+
+Widget _buildInputField(String hintText, TextEditingController controller, {bool obscureText = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 8),
+        TextField(
+          controller: controller,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: Colors.black.withOpacity(0.7),
+              fontSize: 17,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+              letterSpacing: -0.30,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: Color(0xFFE1E1E1),
+                width: 2,
+              ),
+            ),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+          ),
+        ),
+      ],
+    );
+  }
 
 class MapSample extends StatefulWidget {
   const MapSample({super.key});

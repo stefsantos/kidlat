@@ -3,9 +3,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'SignUp2.dart';
 
 class SignUpPage extends StatelessWidget {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
