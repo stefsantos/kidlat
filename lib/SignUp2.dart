@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:vector_graphics/vector_graphics.dart';
+import 'SignUp3.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpPage2 extends StatefulWidget {
   @override
@@ -167,6 +169,24 @@ class _SignUpPage2State extends State<SignUpPage2> {
                       onTap: () {
                         // Add your onTap functionality here
                         print("Create Account Button tapped!");
+
+                        if (isChecked)
+                        {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignUpPage3()),
+                          );
+                        }
+
+                        else
+                        {
+                          Fluttertoast.showToast(msg: "You must agree to the terms to proceed.",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                        }
                       },
                       borderRadius: BorderRadius.circular(30),
                       splashColor: Color.fromRGBO(254, 182, 44, 1.0),
