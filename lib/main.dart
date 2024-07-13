@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:kidlat/auth_page.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'SignUp.dart';
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const AuthPage(),
     );
   }
 }
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
 class LoginPage extends StatelessWidget {
   @override
   const LoginPage({super.key});
+
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,6 +200,14 @@ class SignInPage extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  // method to sign user in
+  void signUserIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text, 
+      password: passwordController.text,
+    );
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -243,8 +254,10 @@ class SignInPage extends StatelessWidget {
                   )
                 )
               ),
+              // email textfield
               SizedBox(height: 20),
               _buildInputField('Email Address', emailController),
+              // password textfield
               SizedBox(height: 10),
               _buildInputField('Password', passwordController, obscureText: true),
               SizedBox(height: 30),
