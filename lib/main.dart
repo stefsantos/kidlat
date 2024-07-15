@@ -1,14 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:kidlat/pages/auth_page.dart';
-import 'package:location/location.dart';
-import 'dart:async';
-import 'pages/SignUp/SignUp.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:kidlat/pages/start_page.dart';
 import 'firebase_options.dart';
-import 'pages/login_page.dart';
 
 
 void main() async {
@@ -35,7 +30,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const AuthPage(),
+      home: const StartPage(),
     );
   }
 }

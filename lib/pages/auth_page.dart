@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kidlat/pages/login_page.dart';
 import 'home_page.dart';
-import 'start_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -12,17 +12,18 @@ class AuthPage extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          //user is logged in
-          if(snapshot.hasData) {
+          print('Auth state changed: ${snapshot.hasData}');
+          
+          // User is logged in
+          if (snapshot.hasData) {
             return MyHomePage();
-          }
-
-          // user is NOT logged in
+          } 
+          // User is NOT logged in
           else {
             return LoginPage();
           }
         },
-      )
+      ),
     );
   }
 }

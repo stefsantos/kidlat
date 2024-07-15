@@ -4,21 +4,29 @@ import 'package:flutter/widgets.dart';
 import 'package:kidlat/pages/auth_page.dart';
 
 
-
-
 class LoginPage extends StatelessWidget {
-  @override
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  // method to sign user in
-  void signUserIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text, 
-      password: passwordController.text,
-    );
+  // Method to sign user in
+  void signUserIn(BuildContext context) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      print('User signed in: ${userCredential.user}');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthPage()),
+      );
+    } catch (e) {
+      // Handle error
+      print('Error signing in: $e');
+    }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -75,9 +83,7 @@ class LoginPage extends StatelessWidget {
               TextButton(
                 onPressed: () {
                     print("Proceed to Login Button tapped!");
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const AuthPage()),
-                  );
+                    signUserIn(context);  // Call signUserIn method
                 },
                 child: Text('Login',
                 style: TextStyle(

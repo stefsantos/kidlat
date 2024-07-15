@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kidlat/pages/SignUp/SignUp.dart';
-import 'package:kidlat/pages/login_page.dart';
+import 'package:kidlat/pages/auth_page.dart';
 
 
 
-class LoginPage extends StatelessWidget {
+class StartPage extends StatelessWidget {
+  const StartPage({super.key});
+
   @override
-  const LoginPage({super.key});
-
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -82,73 +81,73 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              print("login button pressed");
-                              Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => LoginPage())
-                              );
-                            },
-                            child: Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
+                      child: Center(
+                        child: TextButton(
+                          onPressed: () {
+                            print("login button pressed");
+                            Navigator.pushReplacement(
+                              context, 
+                              MaterialPageRoute(builder: (context) => const AuthPage())
+                            );
+                          },
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                            style: TextButton.styleFrom(
-                              minimumSize: Size(double.infinity, 60),
-                              shadowColor: Colors.black.withOpacity(0.2),
-                              backgroundColor: Colors.white,
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(
-                                  color: Colors.grey.shade600.withOpacity(0.2),
-                                  width: 1.5,
-                                )
-                              ),
+                          ),
+                          style: TextButton.styleFrom(
+                            minimumSize: Size(double.infinity, 60),
+                            shadowColor: Colors.black.withOpacity(0.2),
+                            backgroundColor: Colors.white,
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: BorderSide(
+                                color: Colors.grey.shade600.withOpacity(0.2),
+                                width: 1.5,
+                              )
                             ),
                           ),
                         ),
+                      ),
                     ),
                     SizedBox(width: 10),
                     Expanded(
-                        child: Center(
-                          child: TextButton(
-                            onPressed: () {
-                              print("create acc button pressed");
-                              Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => SignUpPage())
-                              );
-                            },
-                            child: Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                      child: Center(
+                        child: TextButton(
+                          onPressed: () {
+                            print("create acc button pressed");
+                            Navigator.pushReplacement(
+                              context, 
+                              MaterialPageRoute(builder: (context) => SignUpPage())
+                            );
+                          },
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                            style: TextButton.styleFrom(
-                              minimumSize: Size(double.infinity, 60),
-                              shadowColor: Colors.black.withOpacity(0.2),
-                              backgroundColor: Color.fromRGBO(254, 182, 44, 1.0),
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(
-                                  color: Colors.grey.shade600.withOpacity(0.2),
-                                  width: 1.5,
-                                )
-                              ),
+                          ),
+                          style: TextButton.styleFrom(
+                            minimumSize: Size(double.infinity, 60),
+                            shadowColor: Colors.black.withOpacity(0.2),
+                            backgroundColor: Color.fromRGBO(254, 182, 44, 1.0),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: BorderSide(
+                                color: Colors.grey.shade600.withOpacity(0.2),
+                                width: 1.5,
+                              )
                             ),
                           ),
                         ),
+                      ),
                     ),
                   ],
                 ),
