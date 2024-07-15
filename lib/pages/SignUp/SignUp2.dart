@@ -5,6 +5,8 @@ import 'package:vector_graphics/vector_graphics.dart';
 import 'SignUp3.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/widgets.dart';
+
+
 class SignUpPage2 extends StatefulWidget {
   @override
   _SignUpPage2State createState() => _SignUpPage2State();
