@@ -1,10 +1,16 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kidlat/pages/login_page.dart';
+
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
+
+  // sign out user method
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +28,7 @@ class ProfilePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
+                onPressed: signUserOut,
                 child: const Text('Logout'),
               ),
             ),

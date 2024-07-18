@@ -42,14 +42,14 @@ class StartPage extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: SizedBox(
                   width: 274,
-                  height: 130,
+                  height: 90,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Text(
                       'Ready to Charge Up?',
                       style: TextStyle(
                         color: Color(0xFF303E44),
-                        fontSize: 40,
+                        fontSize: 30,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w800,
                         letterSpacing: -0.30,
